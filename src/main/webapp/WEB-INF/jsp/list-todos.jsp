@@ -1,7 +1,9 @@
 <%@ include file="common/header.jspf" %>
+<body id="page-top">
+
 <%@ include file="common/navigation.jspf" %>
 	
-	<div class="container">
+	<div class="container mt-5">
 		<table class="table table-striped">
 			<caption>Your todos are</caption>
 			<thead>

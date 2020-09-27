@@ -1,68 +1,85 @@
 <%@ include file="common/header.jspf"%>
+<body id="page-top">
+
 <%@ include file="common/navigation.jspf"%>
-<div class="container">
-<font color="red">${errorMessage}</font>
-	<form:form method="post" modelAttribute="donor">
-	<form:hidden path="user_id" />
-		<form:hidden path="roles" value="DONOR" />
-	
-	<fieldset class="form-group">
-			<form:label path="user_name">Name</form:label>
-			<form:input path="user_name" type="text" class="form-control"
-				required="required" />
-			<form:errors path="user_name" cssClass="text-warning" />
-		</fieldset>
-		<fieldset class="form-group">
-			<form:label path="email">Email</form:label>
-			<form:input path="email" type="email" class="form-control"
-				required="required" />
-			<form:errors path="email" cssClass="text-warning" />
-		</fieldset>
-		<fieldset class="form-group">
-			<form:label path="password">Password</form:label>
-			<form:input path="password" type="text" class="form-control"
-				required="required" />
-			<form:errors path="password" cssClass="text-warning" />
-		</fieldset>
-		<fieldset class="form-group">
-			<form:label path="contact">Contact No.</form:label>
-			<form:input path="contact" type="number" class="form-control"
-				required="required" />
-			<form:errors path="contact" cssClass="text-warning" />
-		</fieldset>
-		<fieldset class="form-group">
-			<form:label path="location">Location</form:label>
-			<form:select path="location" class="form-control"
-				required="required">
-				<form:option value="A" label="District A" />
-				<form:option value="B" label="District B" />
-				<form:option value="C" label="District C" />
-			</form:select>
-			<form:errors path="location" cssClass="text-warning" />
-		</fieldset>
-		<fieldset class="form-group">
-			<form:label path="blood_group">Blood Group</form:label>
-			<form:select path="blood_group" class="form-control"
-				required="required">
-				<form:option value="a_positive" label="A (+ve)" />
-				<form:option value="a_negative" label="A (-ve)" />
-				<form:option value="b_positive" label="B (+ve)" />
-				<form:option value="b_negative" label="B (-ve)" />
-				<form:option value="ab_positive" label="AB (+ve)" />
-				<form:option value="ab_negative" label="AB (-ve)" />
-				<form:option value="o_positive" label="O (+ve)" />
-				<form:option value="o_negative" label="O (-ve)" />
-			</form:select>
-			<form:errors path="blood_group" cssClass="text-warning" />
-		</fieldset>
-		<fieldset class="form-group">
-			<form:label path="consent">Consent</form:label>
-			<form:checkbox class="custom-control custom-switch custom-control-input" path="consent" value="1" />
-
-			<form:errors path="consent" cssClass="text-warning" />
-		</fieldset>
-
-		<button type="submit" class="btn btn-success">Submit</button>
-	</form:form>
+<div class="bg-light container-fluid">
+  <div class="row justify-content-center text-center font-weight-bolder p-1">
+  	<div class="col-2 mx-4"><a class="nav-link btn btn-outline-dark font-weight-bolder" href="/welcome-admin">DASHBOARD</a></div>
+  	<div class="col-2 ml-5"><a class="nav-link text-lg text-dark" href="#">MANAGE -></a></div>
+  	<div class="col-2 mr-4"><a class="nav-link btn btn-outline-dark font-weight-bolder" href="/donor">DONOR</a></div>
+  	  	<div class="col-2 mx-4"><a class="nav-link btn btn-outline-dark font-weight-bolder" href="/organisation">ORGANISATION</a></div>
+  	  	<div class="col-2 mx-4"><a class="nav-link btn btn-outline-dark font-weight-bolder" href="/location">LOCATION</a></div>
+  	
+  </div>
 </div>
+
+<div class="mx-5 px-5">
+<div class="container-fluid mt-5">
+	<div class="card card-body">
+		<h1>Welcome ${name}</h1>
+	</div>
+	<div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6 "><h6 class="m-0 font-weight-bold text-lg h2 text-primary">Donor Details</h6></div>
+                <div class="col-6" style="text-align-last: end;">
+                  	<a href="/add-donor" class="btn btn-outline-primary btn-icon-split">
+                    <span class="icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Add Donor</span>
+                  </a>
+                </div>
+             </div>
+        </div>
+        <div class="card-body">
+              <div class="table-responsive">
+                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                             <tr>
+					<th>Name</th>
+					<th>Contact</th>
+					<th>Email</th>
+					<th>Location</th>
+					<th>Blood Group</th>
+					<th>Consent</th>
+					<th></th>
+					<th></th>
+				</tr>
+                           </thead>
+                           <tfoot>
+                              <tr>
+					<th>Name</th>
+					<th>Contact</th>
+					<th>Email</th>
+					<th>Location</th>
+					<th>Blood Group</th>
+					<th>Consent</th>
+					<th></th>
+					<th></th>
+				</tr>
+                           </tfoot>
+                           <tbody>
+                
+                              <c:forEach items="${donor}" var="donor">
+					<tr>
+						<td>${donor.user_name}</td>
+						<td>${donor.contact}</td>
+						<td>${donor.email}</td>
+						<td>${donor.location}</td>
+						<td>${donor.blood_group}</td>
+						<td>${donor.consent}</td>
+						<td><a type="button" class="btn btn-success"
+							href="/update-donor?id=${donor.user_id}"><i class="fas fa-edit"></i></a></td>
+						<td><a type="button" class="btn btn-danger"
+							href="/delete-donor?id=${donor.user_id}"><i class="fas fa-trash-alt"></i></a></td>
+					</tr>
+				</c:forEach>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+	</div>
+	</div>
 <%@ include file="common/footer.jspf"%>

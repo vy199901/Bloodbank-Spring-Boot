@@ -6,6 +6,8 @@
 
 <head>
 <title>BBM</title>
+<link rel = "icon" href = "/images/logo.jpg" type = "image/x-icon"> 
+
 <link href="webjars/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
 <!-- CSS only -->
@@ -16,7 +18,7 @@
 
 	<nav role="navigation"
 		class=" navbar navbar-expand navbar-light bg-light sticky-top  py-2 shadow">
-		<a href="/bloodbank" class="navbar-brand ml-4"> <img
+		<a href="/" class="navbar-brand ml-4"> <img
 			src="/images/logo.jpg" width="40" height="30"
 			class="d-inline-block align-top" alt=""> <span
 			class="font-weight-bolder h3 ml-4">BBM</span>
@@ -33,23 +35,24 @@
 	<div class=" pt-5"
 		style="background-image: url('images/front-bg.jpg'); background-size: cover; background-repeat: no-repeat; width: 100%;">
 		<div class="container pb-5">
-			<div class="row">
+			<div class="row mb-5 pb-3">
 				<div class="col-7 ">
-					<div class="card mt-5 collapse">
+					<div id="content" class="card mt-5 collapse">
 						<div class="card-header">
 							<h3>Available Resources According to Location:</h3>
 						</div>
 						<div class="card-body">
-							<table class="table-stripped">
+							<table class="table table-lg table-stripped">
 								<thead class="table-dark">
 									<tr>
 										<th>Name</th>
+										<th>Email ID</th>
 										<th>Contact No.</th>
 									</tr>
 								</thead>
 								<tbody id="result">
 									<tr>
-										<td colspan="2">Select Dropdown</td>
+										<td colspan="3">Select Dropdown</td>
 									</tr>
 								</tbody>
 							</table>
@@ -66,9 +69,9 @@
 									name="location" class="form-control font-weight-bold px-3 m-1" required="required">
 									<option selected disabled>Choose Your Location
 										</option>
-									<option value="A">District A</option>
-									<option value="B">District B</option>
-									<option value="C">District C</option>
+										<c:forEach items="${district}" var="dis">
+										<option value=<c:out value="${dis}"/>>District <c:out value="${dis}"/></option>
+        								</c:forEach>
 								</select>
 							</fieldset>
 							<fieldset class="form-group">
@@ -80,7 +83,7 @@
 									<option value="a_negative">A (-ve)</option>
 									<option value="b_positive">B (+ve)</option>
 									<option value="b_negative">B (-ve)</option>
-									<option value="ab_positive ">AB (+ve)</option>
+									<option value="ab_positive">AB (+ve)</option>
 									<option value="ab_negative">AB (-ve)</option>
 									<option value="o_positive">O (+ve)</option>
 									<option value="o_negative">O (-ve)</option>
@@ -138,7 +141,8 @@
 												"<span style='color: red'>NO Data Available</span>");
 							}
 						});
-
+				$("#content").collapse('show');
+				
 			} else {
 				alert("Please Select Blood Group to Enquire about");
 			}

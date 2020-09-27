@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.cognizant.bloodbank.model.User;
 import com.cognizant.bloodbank.service.LoginService;
@@ -18,7 +19,15 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "/login",params ={"message"},method = RequestMethod.GET)
+	public String showLoginPage(@RequestParam String message ,ModelMap model) {
+		if(message != null) {
+			model.put("successMessage", "Registration Succesfull. Login Here !!");
+		}
+		return "login";
+	}
+	
+	@RequestMapping(value = "/login",method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model) {
 		return "login";
 	}
@@ -38,11 +47,14 @@ public class LoginController {
 		int user_id = user.getUser_id();
 		String user_roles = user.getRoles();
 
+
 		System.out.println(user_roles);
 
 		model.put("name", user_name);
 		model.put("id", user_id);
 		model.put("user_roles", user_roles);
+
+	System.out.println(user);
 
 		if (user_roles.equalsIgnoreCase("DONOR")) {
 			return "redirect:/welcome-donor";
@@ -53,6 +65,12 @@ public class LoginController {
 		} else {
 			return "welcome";
 		}
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(SessionStatus sessionStatus) {
+		sessionStatus.setComplete();
+		return "redirect:/";
 	}
 	
 

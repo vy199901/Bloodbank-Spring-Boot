@@ -39,12 +39,12 @@ public class LoginService {
 		String result = "";
 		if(!user.isEmpty()) {
 			for (User u : user) {
-				result = result + "<tr><td>"+u.getUser_name()+"</td><td>"+u.getContact()+"</td></tr>";
+				result = result + "<tr><td>"+u.getUser_name()+"</td><td>"+u.getEmail()+"</td><td>"+u.getContact()+"</td></tr>";
 			}
 			System.out.println("Result in login Service : "+result);
 			return result;
 		}
-		return "<tr><td colspan='2'>No Record Found</td></tr>";
+		return "<tr><td colspan='3'>No Record Found</td></tr>";
 	}
 	
 	public String getOrganisationDetails(String user_roles , String location) {
@@ -54,12 +54,16 @@ public class LoginService {
 		String result = "";
 		if(!user.isEmpty()) {
 			for (User u : user) {
-				result = result + "<tr><td>"+u.getUser_name()+"</td><td>"+u.getContact()+"</td></tr>";
+				result = result + "<tr><td>"+u.getUser_name()+"</td><td>"+u.getEmail()+"</td><td>"+u.getContact()+"</td></tr>";
 			}
 			System.out.println("Result in login Service : "+result);
 			return result;
 		}
 		return "<tr><td colspan='2'>No Record Found</td></tr>";
+	}
+	
+	public int getRolesCount(String roles) {
+		return userRepository.countByRoles(roles);
 	}
 	
 }

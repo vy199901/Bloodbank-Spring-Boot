@@ -22,6 +22,13 @@ public class DonorService {
 		return donorRepository.findAll();
 	}
 	
+	public boolean saveDetails(Donor donor) {
+		if(donorRepository.existsByEmail(donor.getEmail())) {
+			return false;
+		}
+		return donorRepository.save(donor) != null;
+	}
+	
 	public boolean updateDetails(Donor donor) {
 		return donorRepository.save(donor) != null;
 	}

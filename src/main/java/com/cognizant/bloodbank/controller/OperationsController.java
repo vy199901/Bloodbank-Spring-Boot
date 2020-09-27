@@ -1,5 +1,7 @@
 package com.cognizant.bloodbank.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +11,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cognizant.bloodbank.model.Donor;
 import com.cognizant.bloodbank.model.FetchDetails;
+import com.cognizant.bloodbank.model.Location;
 import com.cognizant.bloodbank.model.Organisation;
 import com.cognizant.bloodbank.model.User;
 import com.cognizant.bloodbank.service.DonorService;
+import com.cognizant.bloodbank.service.LocationService;
 import com.cognizant.bloodbank.service.LoginService;
 import com.cognizant.bloodbank.service.OrganisationService;
 
@@ -32,9 +37,20 @@ public class OperationsController {
 
 	@Autowired
 	private OrganisationService organisationService;
+	
+	@Autowired
+	private LocationService locationService;
 
-	@RequestMapping(value = "/bloodbank", method = RequestMethod.GET)
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String showTestPage(ModelMap model) {
+
+		return "test";
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showWelcomePage(ModelMap model) {
+		List<String> district = locationService.getLocation();
+		model.addAttribute("district", district);
 		return "welcome";
 	}
 
@@ -56,6 +72,8 @@ public class OperationsController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String showRegisterUser(ModelMap model) {
+		List<String> district = locationService.getLocation();
+		model.addAttribute("district", district);
 		model.addAttribute("user", new User());
 		return "register";
 	}
@@ -105,24 +123,94 @@ public class OperationsController {
 			model.put("errorMessage", "Error in Registration Process Try Again after some Time");
 			return "register";
 		}
-		model.put("errorMessage", "Registration Succesfull, Please Login Here !!");
-		return "redirect:/login";
+		return "redirect:/login?message=success";
 	}
 
 	@RequestMapping(value = "/welcome-admin", method = RequestMethod.GET)
 	public String showAdminPage(ModelMap model) {
 
-		int id = (Integer) model.get("id");
-		String user_name = (String) model.get("name");
-		String user_roles = (String) model.get("user_roles");
+		int id = getLoggedInUserId(model);
+		String user_name = getLoggedInUserName(model);
+		String user_roles = getLoggedInUserRole(model);
+		model.put("name", user_name);
+		model.put("id", id);
+		model.put("user_roles", user_roles);
+		
+		int donorCount = loginService.getRolesCount("DONOR");
+		int bloodbankCount = loginService.getRolesCount("BLOODBANK");
+		int hospitalCount = loginService.getRolesCount("HOSPITAL");
+		int locationCount = (int) locationService.getDistrictCount();
+		
+		model.put("donorCount", donorCount);
+		model.put("bloodbankCount", bloodbankCount);
+		model.put("hospitalCount", hospitalCount);
+		model.put("locationCount", locationCount);
+
+		return "welcome-admin";
+	}
+	
+	@RequestMapping(value = "/donor", method = RequestMethod.GET)
+	public String showAdminDonorPage(ModelMap model) {
+
+		int id = getLoggedInUserId(model);
+		String user_name = getLoggedInUserName(model);
+		String user_roles = getLoggedInUserRole(model);
 		model.put("name", user_name);
 		model.put("id", id);
 		model.put("user_roles", user_roles);
 
 		model.put("donor", donorService.fetchAll());
 
+		return "donor";
+	}
+	
+	@RequestMapping(value = "/organisation", method = RequestMethod.GET)
+	public String showAdminOrganisationPage(ModelMap model) {
+
+		int id = getLoggedInUserId(model);
+		String user_name = getLoggedInUserName(model);
+		model.put("name", user_name);
+		model.put("id", id);
+
 		model.put("organisation", organisationService.fetchAll());
 
-		return "welcome-admin";
+		return "organisation";
+	}
+	
+	@RequestMapping(value = "/location", method = RequestMethod.GET)
+	public String showAdminLocationPage(ModelMap model) {
+
+		int id = getLoggedInUserId(model);
+		String user_name = getLoggedInUserName(model);
+		model.put("name", user_name);
+		model.put("id", id);
+
+		model.put("location", locationService.fetchAll());
+
+		return "location";
+	}
+	
+	@RequestMapping(value = "/location", method = RequestMethod.POST)
+	public String addLocationAdmin(ModelMap model, @RequestParam String district) {
+
+		Location location = new Location();
+		location.setDistrict(district);
+		
+		if(!locationService.save(location)) {
+			model.put("errorMessage", "Error in Adding Location");
+		}
+		return "redirect:/location";
+	}
+
+	private Integer getLoggedInUserId(ModelMap model) {
+		return (Integer) model.get("id");
+	}
+
+	private String getLoggedInUserRole(ModelMap model) {
+		return (String) model.get("user_roles");
+	}
+
+	private String getLoggedInUserName(ModelMap model) {
+		return (String) model.get("name");
 	}
 }
