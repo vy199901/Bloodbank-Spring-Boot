@@ -40,12 +40,6 @@ public class OperationsController {
 	
 	@Autowired
 	private LocationService locationService;
-
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public String showTestPage(ModelMap model) {
-
-		return "test";
-	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showWelcomePage(ModelMap model) {
@@ -85,7 +79,9 @@ public class OperationsController {
 		boolean isValidEmail = loginService.validateEmail(user.getEmail());
 
 		if (isValidEmail) {
-			model.put("errorMessage", "Email Already Exists, Please use unique Email-ID or tey Logging-IN");
+			model.put("errorMessage", "Email Already Exists, Please use unique Email-ID or try Logging-IN");
+			List<String> district = locationService.getLocation();
+			model.addAttribute("district", district);
 			return "register";
 		}
 

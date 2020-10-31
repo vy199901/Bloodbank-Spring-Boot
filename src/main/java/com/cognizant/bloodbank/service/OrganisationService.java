@@ -23,6 +23,13 @@ public class OrganisationService {
 		return organisationRepository.findAll();
 	}
 	
+	public boolean saveDetails(Organisation organisation) {
+		if(organisationRepository.existsByEmail(organisation.getEmail())) {
+			return false;
+		}
+		return organisationRepository.save(organisation) != null;
+	}
+	
 	public boolean updateDetails(Organisation organisation) {
 		return organisationRepository.save(organisation) != null;
 	}

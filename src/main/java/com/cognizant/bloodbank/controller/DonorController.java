@@ -76,21 +76,6 @@ public class DonorController {
 		return "redirect:/welcome-donor";
 	}
 
-//	@RequestMapping(value = "/donor", method = RequestMethod.POST)
-//	public String addDonorDetails(ModelMap model, @Valid Donor donor, BindingResult result) {
-//
-//		if (result.hasErrors()) {
-//			model.put("errorMessage", "Error in Updating Record");
-//			return "donor-update";
-//		}
-//
-//		if (!donorService.updateDetails(donor)) {
-//			return "donor-update";
-//		}
-//
-//		return "redirect:/welcome-donor";
-//	}
-
 	@RequestMapping(value = "/delete-donor", method = RequestMethod.GET)
 	public String deleteDonor(@RequestParam int id) {
 		donorService.deleteDonor(id);
@@ -131,7 +116,7 @@ public class DonorController {
 	public String addDonorDetailsAdmin(ModelMap model, @Valid Donor donor, BindingResult result) {
 
 		if (result.hasErrors() || !donorService.saveDetails(donor)) {
-			model.put("errorMessage", "Error in Updating Record");
+			model.put("errorMessage", "Error in Updating Record. Email-Id already exists.");
 			List<String> district = locationService.getLocation();
 			model.addAttribute("district", district);
 			model.addAttribute("donor", new Donor());

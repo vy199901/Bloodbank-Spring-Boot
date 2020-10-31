@@ -120,12 +120,11 @@ public class OrganisationController {
 	@RequestMapping(value = "/add-organisation", method = RequestMethod.POST)
 	public String addOrganisationDetailsAdmin(ModelMap model, @Valid Organisation organisation, BindingResult result) {
 
-		if (result.hasErrors()) {
-			model.put("errorMessage", "Error in Updating Record");
-			return "organisation-add";
-		}
-
-		if (!organisationService.updateDetails(organisation)) {
+		if (result.hasErrors() || !organisationService.saveDetails(organisation)) {
+			model.put("errorMessage", "Error in Updating Record. Email-Id already exists.");
+			List<String> district = locationService.getLocation();
+			model.addAttribute("district", district);
+			model.addAttribute("organisation", new Organisation());
 			return "organisation-add";
 		}
 

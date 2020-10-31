@@ -66,7 +66,7 @@
 						<div class="py-3 text-lg">
 							<fieldset class="form-group">
 								<label for="location">LOCATION</label> <select id="location"
-									name="location" class="form-control font-weight-bold px-3 m-1" required="required">
+									name="location" class="form-control font-weight-bold px-3 m-1" onchange="fetch_details()" required="required">
 									<option selected disabled>Choose Your Location
 										</option>
 										<c:forEach items="${district}" var="dis">
@@ -121,8 +121,7 @@
 				var blood_group = $("select#blood_group").val();
 				var user_roles = $("select#user_roles").val();
 
-				$
-						.ajax({
+						$.ajax({
 							type : "POST",
 							contentType : "application/json; charset=utf-8",
 							url : "fetch",
@@ -137,8 +136,7 @@
 							},
 							error : function(err) {
 								$("#result")
-										.html(
-												"<span style='color: red'>NO Data Available</span>");
+										.html("<span style='color: red'>NO Data Available</span>");
 							}
 						});
 				$("#content").collapse('show');
