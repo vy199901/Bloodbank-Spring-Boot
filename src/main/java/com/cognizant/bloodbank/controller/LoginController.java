@@ -22,7 +22,7 @@ public class LoginController {
 	@RequestMapping(value = "/login",params ={"message"},method = RequestMethod.GET)
 	public String showLoginPage(@RequestParam String message ,ModelMap model) {
 		if(message != null) {
-			model.put("successMessage", "Registration Succesfull. Login Here !!");
+			model.put("successMessage", "Registration Successful. Login Here !!");
 		}
 		return "login";
 	}
